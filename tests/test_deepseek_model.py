@@ -1,7 +1,8 @@
-import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import MagicMock, Mock, patch
 
-from agents_manager.models.DeepSeek import DeepSeek
+import pytest
+
+from models.DeepSeek import DeepSeek
 
 
 class TestDeepSeekModel:
@@ -12,13 +13,13 @@ class TestDeepSeekModel:
         self.model_name = "deepseek-chat"
         self.api_key = "test-api-key"
         # Patch the OpenAI import within the DeepSeek module
-        with patch("agents_manager.models.DeepSeek.OpenAI"):
+        with patch("models.DeepSeek.OpenAI"):
             self.model = DeepSeek(name=self.model_name, api_key=self.api_key)
 
     def test_init(self):
         """Test initialization of DeepSeek model."""
         # Patch the OpenAI import within the DeepSeek module
-        with patch("agents_manager.models.DeepSeek.OpenAI") as mock_openai:
+        with patch("models.DeepSeek.OpenAI") as mock_openai:
             model = DeepSeek(name=self.model_name, api_key=self.api_key)
 
             assert model.name == self.model_name
@@ -33,7 +34,7 @@ class TestDeepSeekModel:
         """Test initialization with None name raises ValueError."""
         # The error message comes from OpenAi, not DeepSeek
         with (
-            patch("agents_manager.models.DeepSeek.OpenAI"),
+            patch("models.DeepSeek.OpenAI"),
             pytest.raises(ValueError, match="A valid OpenAI model name is required"),
         ):
             DeepSeek(name=None, api_key=self.api_key)
@@ -54,7 +55,7 @@ class TestDeepSeekModel:
     def test_client_configuration(self):
         """Test that the client is configured correctly."""
         # Create a new mock for the OpenAI class
-        with patch("agents_manager.models.DeepSeek.OpenAI") as mock_openai_class:
+        with patch("models.DeepSeek.OpenAI") as mock_openai_class:
             # Create a mock instance that will be returned by the OpenAI constructor
             mock_client = Mock()
             mock_openai_class.return_value = mock_client
@@ -70,7 +71,7 @@ class TestDeepSeekModel:
             # Verify that the client was assigned to the model
             assert model.client == mock_client
 
-    @patch("agents_manager.models.OpenAi.OpenAi.generate_response")
+    @patch("models.OpenAi.OpenAi.generate_response")
     def test_generate_response_inheritance(self, mock_generate_response):
         """Test that generate_response is inherited from OpenAi."""
         # Set up the mock to return a specific value
@@ -88,7 +89,7 @@ class TestDeepSeekModel:
         # Verify the response
         assert response == {"content": "Test response", "tool_calls": []}
 
-    @patch("agents_manager.models.OpenAi.OpenAi.generate_stream_response")
+    @patch("models.OpenAi.OpenAi.generate_stream_response")
     def test_generate_stream_response_inheritance(self, mock_generate_stream_response):
         """Test that generate_stream_response is inherited from OpenAi."""
         # Set up the mock to return a specific generator

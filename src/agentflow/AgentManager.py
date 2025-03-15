@@ -1,8 +1,8 @@
 import json
-from typing import List, Optional, Any, Generator, Dict, Callable, Tuple, Union
+from typing import Any, Callable, Dict, Generator, List, Optional, Tuple, Union
 
-from agents_manager.Container import Container
-from agents_manager.Agent import Agent
+from agentflow.Agent import Agent
+from agentflow.Container import Container
 
 
 class AgentManager:

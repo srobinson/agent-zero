@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import Mock, patch
 
-from agents_manager.Agent import Agent
-from agents_manager.Workflow import AgentStep, AgentWorkflow
+from agentflow.Agent import Agent
+from agentflow.Workflow import AgentStep, AgentWorkflow
 
 
 class TestAgentStep(unittest.TestCase):

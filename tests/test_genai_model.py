@@ -1,8 +1,9 @@
-import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import MagicMock, Mock, patch
 
-from agents_manager.models.Genai import Genai
-from agents_manager.Container import Container
+import pytest
+
+from agentflow.Container import Container
+from models.Genai import Genai
 
 
 class TestGenaiModel:
@@ -12,12 +13,12 @@ class TestGenaiModel:
         """Set up test fixtures before each test method."""
         self.model_name = "gemini-2.0-flash"
         self.api_key = "test-api-key"
-        with patch("agents_manager.models.Genai.genai"):
+        with patch("models.Genai.genai"):
             self.model = Genai(name=self.model_name, api_key=self.api_key)
 
     def test_init(self):
         """Test initialization of Genai model."""
-        with patch("agents_manager.models.Genai.genai") as mock_genai:
+        with patch("models.Genai.genai") as mock_genai:
             model = Genai(name=self.model_name, api_key=self.api_key)
 
             assert model.name == self.model_name
@@ -30,17 +31,15 @@ class TestGenaiModel:
     def test_init_with_none_name(self):
         """Test initialization with None name raises ValueError."""
         with (
-            patch("agents_manager.models.Genai.genai"),
+            patch("models.Genai.genai"),
             pytest.raises(ValueError, match="A valid Genai model name is required"),
         ):
             Genai(name=None, api_key=self.api_key)
 
     def test_init_with_additional_args(self):
         """Test initialization with additional arguments."""
-        with patch("agents_manager.models.Genai.genai") as mock_genai:
-            with patch(
-                "agents_manager.models.Genai.types.HttpOptions"
-            ) as mock_http_options:
+        with patch("models.Genai.genai") as mock_genai:
+            with patch("models.Genai.types.HttpOptions") as mock_http_options:
                 mock_http_options.return_value = "mock_http_options"
 
                 model = Genai(
@@ -115,9 +114,9 @@ class TestGenaiModel:
         # Mock the convert_to_function_declarations method
         with (
             patch(
-                "agents_manager.models.Genai.Genai.convert_to_function_declarations"
+                "models.Genai.Genai.convert_to_function_declarations"
             ) as mock_convert,
-            patch("agents_manager.models.Genai.types.Tool") as mock_tool,
+            patch("models.Genai.types.Tool") as mock_tool,
         ):
             # Return a proper dictionary structure instead of a string
             mock_convert.return_value = [
@@ -200,10 +199,8 @@ class TestGenaiModel:
         ]
 
         with (
-            patch("agents_manager.models.Genai.types.Schema") as mock_schema,
-            patch(
-                "agents_manager.models.Genai.types.FunctionDeclaration"
-            ) as mock_func_decl,
+            patch("models.Genai.types.Schema") as mock_schema,
+            patch("models.Genai.types.FunctionDeclaration") as mock_func_decl,
         ):
 
             # Mock Schema instances
@@ -240,8 +237,8 @@ class TestGenaiModel:
         ]
 
         with (
-            patch("agents_manager.models.Genai.types.Part") as mock_part,
-            patch("agents_manager.models.Genai.types.Content") as mock_content,
+            patch("models.Genai.types.Part") as mock_part,
+            patch("models.Genai.types.Content") as mock_content,
         ):
 
             # Mock Part.from_text
@@ -324,9 +321,7 @@ class TestGenaiModel:
         response = {"content": "Using a tool", "candidates": [mock_candidate]}
 
         # Mock the _content_to_json method
-        with patch(
-            "agents_manager.models.Genai.Genai._content_to_json"
-        ) as mock_to_json:
+        with patch("models.Genai.Genai._content_to_json") as mock_to_json:
             mock_to_json.return_value = [
                 {"role": "assistant", "content": "Converted content"}
             ]
@@ -439,10 +434,8 @@ class TestGenaiModel:
 
         # Mock the conversion functions
         with (
-            patch("agents_manager.models.Genai.function_to_json") as mock_func_to_json,
-            patch(
-                "agents_manager.models.Genai.container_to_json"
-            ) as mock_container_to_json,
+            patch("models.Genai.function_to_json") as mock_func_to_json,
+            patch("models.Genai.container_to_json") as mock_container_to_json,
         ):
 
             mock_func_to_json.return_value = {"function": "json"}

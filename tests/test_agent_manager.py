@@ -1,11 +1,9 @@
-import json
 import unittest
-from unittest.mock import Mock, patch, MagicMock
-import pytest
+from unittest.mock import MagicMock, Mock, patch
 
-from agents_manager.AgentManager import AgentManager
-from agents_manager.Agent import Agent
-from agents_manager.Container import Container
+from agentflow.Agent import Agent
+from agentflow.AgentManager import AgentManager
+from agentflow.Container import Container
 
 
 class TestAgentManager(unittest.TestCase):
@@ -148,7 +146,7 @@ class TestAgentManager(unittest.TestCase):
         )
         mock_agent.set_messages.assert_called_once_with(current_messages)
 
-    @patch("agents_manager.AgentManager.AgentManager.initialize_user_input")
+    @patch("agentflow.AgentManager.AgentManager.initialize_user_input")
     def test_run_agent_no_tool_calls(self, mock_initialize):
         """Test running an agent with no tool calls."""
         mock_agent = Mock(spec=Agent)
@@ -166,8 +164,8 @@ class TestAgentManager(unittest.TestCase):
         mock_agent.get_response.assert_called_once()
         self.assertEqual(result, {"content": "Hello, I'm an agent", "tool_calls": []})
 
-    @patch("agents_manager.AgentManager.AgentManager.initialize_user_input")
-    @patch("agents_manager.AgentManager.AgentManager._prepare_final_messages")
+    @patch("agentflow.AgentManager.AgentManager.initialize_user_input")
+    @patch("agentflow.AgentManager.AgentManager._prepare_final_messages")
     def test_run_agent_with_tool_calls(self, mock_prepare, mock_initialize):
         """Test running an agent with tool calls."""
         mock_agent = Mock(spec=Agent)
@@ -228,7 +226,7 @@ class TestAgentManager(unittest.TestCase):
         mock_prepare.assert_called_once()
         self.assertEqual(result, {"content": "Here's your result", "tool_calls": []})
 
-    @patch("agents_manager.AgentManager.AgentManager.initialize_user_input")
+    @patch("agentflow.AgentManager.AgentManager.initialize_user_input")
     def test_run_agent_with_container_tool(self, mock_initialize):
         """Test running an agent with a Container tool."""
         mock_agent = Mock(spec=Agent)
@@ -288,7 +286,7 @@ class TestAgentManager(unittest.TestCase):
         mock_initialize.assert_called_once_with("test_agent", "user message")
         self.assertEqual(result, {"content": "Here's your result", "tool_calls": []})
 
-    @patch("agents_manager.AgentManager.AgentManager.initialize_user_input")
+    @patch("agentflow.AgentManager.AgentManager.initialize_user_input")
     def test_run_agent_stream_no_tools(self, mock_initialize):
         """Test streaming an agent with no tools."""
         mock_agent = Mock(spec=Agent)
@@ -306,8 +304,8 @@ class TestAgentManager(unittest.TestCase):
         mock_agent.get_stream_response.assert_called_once()
         self.assertEqual(result, [{"content": "Hello"}, {"content": " world"}])
 
-    @patch("agents_manager.AgentManager.AgentManager.initialize_user_input")
-    @patch("agents_manager.AgentManager.AgentManager._prepare_final_messages")
+    @patch("agentflow.AgentManager.AgentManager.initialize_user_input")
+    @patch("agentflow.AgentManager.AgentManager._prepare_final_messages")
     def test_run_agent_stream_with_tool_calls(self, mock_prepare, mock_initialize):
         """Test streaming an agent with tool calls."""
         mock_agent = Mock(spec=Agent)

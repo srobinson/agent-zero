@@ -1,8 +1,8 @@
-from typing import Any, Dict, List, Union, Optional, Generator, Callable
+from typing import Any, Callable, Dict, Generator, List, Optional, Union
 
 from openai import OpenAI
 
-from agents_manager.models.OpenAi import OpenAi
+from models.OpenAi import OpenAi
 
 
 class DeepSeek(OpenAi):

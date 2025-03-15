@@ -1,9 +1,10 @@
 import json
-import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import MagicMock, Mock, patch
 
-from agents_manager.models.OpenAi import OpenAi
-from agents_manager.Container import Container
+import pytest
+
+from agentflow.Container import Container
+from models.OpenAi import OpenAi
 
 
 class TestOpenAiModel:
@@ -14,13 +15,13 @@ class TestOpenAiModel:
         self.model_name = "gpt-3.5-turbo"
         self.api_key = "test-api-key"
         # Use a context manager to patch OpenAI during initialization
-        with patch("agents_manager.models.OpenAi.OpenAI"):
+        with patch("models.OpenAi.OpenAI"):
             self.model = OpenAi(name=self.model_name, api_key=self.api_key)
 
     def test_init(self):
         """Test initialization of OpenAi model."""
         # Patch the OpenAI class in the correct module
-        with patch("agents_manager.models.OpenAi.OpenAI") as mock_openai:
+        with patch("models.OpenAi.OpenAI") as mock_openai:
             model = OpenAi(name=self.model_name, api_key=self.api_key)
 
             assert model.name == self.model_name
@@ -30,7 +31,7 @@ class TestOpenAiModel:
     def test_init_with_none_name(self):
         """Test initialization with None name raises ValueError."""
         with (
-            patch("agents_manager.models.OpenAi.OpenAI"),
+            patch("models.OpenAi.OpenAI"),
             pytest.raises(ValueError, match="A valid OpenAI model name is required"),
         ):
             OpenAi(name=None, api_key=self.api_key)
@@ -293,10 +294,8 @@ class TestOpenAiModel:
 
         # Call the method
         with (
-            patch("agents_manager.models.OpenAi.function_to_json") as mock_func_to_json,
-            patch(
-                "agents_manager.models.OpenAi.container_to_json"
-            ) as mock_container_to_json,
+            patch("models.OpenAi.function_to_json") as mock_func_to_json,
+            patch("models.OpenAi.container_to_json") as mock_container_to_json,
         ):
 
             mock_func_to_json.return_value = {"function": "json"}

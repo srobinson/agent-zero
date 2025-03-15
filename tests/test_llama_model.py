@@ -1,8 +1,9 @@
-import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import MagicMock, Mock, patch
 
-from agents_manager.models.Llama import Llama
-from agents_manager.Container import Container
+import pytest
+
+from agentflow.Container import Container
+from models.Llama import Llama
 
 
 class TestLlamaModel:
@@ -12,12 +13,12 @@ class TestLlamaModel:
         """Set up test fixtures before each test method."""
         self.model_name = "llama3.1-70b"
         self.api_key = "test-api-key"
-        with patch("agents_manager.models.Llama.OpenAI"):
+        with patch("models.Llama.OpenAI"):
             self.model = Llama(name=self.model_name, api_key=self.api_key)
 
     def test_init(self):
         """Test initialization of Llama model."""
-        with patch("agents_manager.models.Llama.OpenAI") as mock_openai:
+        with patch("models.Llama.OpenAI") as mock_openai:
             model = Llama(name=self.model_name, api_key=self.api_key)
 
             assert model.name == self.model_name
@@ -31,7 +32,7 @@ class TestLlamaModel:
     def test_init_with_custom_base_url(self):
         """Test initialization with a custom base URL."""
         custom_base_url = "https://custom.llama-api.com"
-        with patch("agents_manager.models.Llama.OpenAI") as mock_openai:
+        with patch("models.Llama.OpenAI") as mock_openai:
             model = Llama(
                 name=self.model_name, api_key=self.api_key, base_url=custom_base_url
             )
@@ -50,7 +51,7 @@ class TestLlamaModel:
     def test_init_with_none_name(self):
         """Test initialization with None name raises ValueError."""
         with (
-            patch("agents_manager.models.Llama.OpenAI"),
+            patch("models.Llama.OpenAI"),
             pytest.raises(ValueError, match="A valid OpenAI model name is required"),
         ):
             Llama(name=None, api_key=self.api_key)
@@ -68,7 +69,7 @@ class TestLlamaModel:
         assert hasattr(self.model, "set_user_message")
         assert hasattr(self.model, "set_tools")
 
-    @patch("agents_manager.models.OpenAi.OpenAi.generate_response")
+    @patch("models.OpenAi.OpenAi.generate_response")
     def test_generate_response_inheritance(self, mock_generate_response):
         """Test that generate_response is inherited from OpenAi."""
         # Set up the mock to return a specific value
@@ -86,7 +87,7 @@ class TestLlamaModel:
         # Verify the response
         assert response == {"content": "Test response", "tool_calls": []}
 
-    @patch("agents_manager.models.OpenAi.OpenAi.generate_stream_response")
+    @patch("models.OpenAi.OpenAi.generate_stream_response")
     def test_generate_stream_response_inheritance(self, mock_generate_stream_response):
         """Test that generate_stream_response is inherited from OpenAi."""
         # Set up the mock to return a specific generator
@@ -108,7 +109,7 @@ class TestLlamaModel:
         assert results[0]["content"] == "Hello"
         assert results[1]["content"] == "Hello world"
 
-    @patch("agents_manager.models.OpenAi.OpenAi.set_tools")
+    @patch("models.OpenAi.OpenAi.set_tools")
     def test_set_tools_inheritance(self, mock_set_tools):
         """Test that set_tools is inherited from OpenAi."""
 

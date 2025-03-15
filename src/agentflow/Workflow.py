@@ -5,9 +5,9 @@ This module provides classes for defining workflows composed of agent steps,
 allowing for structured execution of multiple agents in sequence or based on conditions.
 """
 
-from typing import List, Dict, Any, Optional, Callable
+from typing import Any, Callable, Dict, List, Optional
 
-from agents_manager.Agent import Agent
+from agentflow.Agent import Agent
 
 
 class AgentStep:

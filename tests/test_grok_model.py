@@ -1,8 +1,9 @@
-import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import MagicMock, Mock, patch
 
-from agents_manager.models.Grok import Grok
-from agents_manager.Container import Container
+import pytest
+
+from agentflow.Container import Container
+from models.Grok import Grok
 
 
 class TestGrokModel:
@@ -12,12 +13,12 @@ class TestGrokModel:
         """Set up test fixtures before each test method."""
         self.model_name = "grok-2-latest"
         self.api_key = "test-api-key"
-        with patch("agents_manager.models.Grok.OpenAI"):
+        with patch("models.Grok.OpenAI"):
             self.model = Grok(name=self.model_name, api_key=self.api_key)
 
     def test_init(self):
         """Test initialization of Grok model."""
-        with patch("agents_manager.models.Grok.OpenAI") as mock_openai:
+        with patch("models.Grok.OpenAI") as mock_openai:
             model = Grok(name=self.model_name, api_key=self.api_key)
 
             assert model.name == self.model_name
@@ -31,7 +32,7 @@ class TestGrokModel:
     def test_init_with_custom_base_url(self):
         """Test initialization with a custom base URL."""
         custom_base_url = "https://custom.x.ai/v1"
-        with patch("agents_manager.models.Grok.OpenAI") as mock_openai:
+        with patch("models.Grok.OpenAI") as mock_openai:
             model = Grok(
                 name=self.model_name, api_key=self.api_key, base_url=custom_base_url
             )
@@ -50,7 +51,7 @@ class TestGrokModel:
     def test_init_with_none_name(self):
         """Test initialization with None name raises ValueError."""
         with (
-            patch("agents_manager.models.Grok.OpenAI"),
+            patch("models.Grok.OpenAI"),
             pytest.raises(ValueError, match="A valid OpenAI model name is required"),
         ):
             Grok(name=None, api_key=self.api_key)
@@ -68,7 +69,7 @@ class TestGrokModel:
         assert hasattr(self.model, "set_user_message")
         assert hasattr(self.model, "set_tools")
 
-    @patch("agents_manager.models.OpenAi.OpenAi.generate_response")
+    @patch("models.OpenAi.OpenAi.generate_response")
     def test_generate_response_inheritance(self, mock_generate_response):
         """Test that generate_response is inherited from OpenAi."""
         # Set up the mock to return a specific value
@@ -86,7 +87,7 @@ class TestGrokModel:
         # Verify the response
         assert response == {"content": "Test response", "tool_calls": []}
 
-    @patch("agents_manager.models.OpenAi.OpenAi.generate_stream_response")
+    @patch("models.OpenAi.OpenAi.generate_stream_response")
     def test_generate_stream_response_inheritance(self, mock_generate_stream_response):
         """Test that generate_stream_response is inherited from OpenAi."""
         # Set up the mock to return a specific generator
@@ -108,7 +109,7 @@ class TestGrokModel:
         assert results[0]["content"] == "Hello"
         assert results[1]["content"] == "Hello world"
 
-    @patch("agents_manager.models.OpenAi.OpenAi.set_tools")
+    @patch("models.OpenAi.OpenAi.set_tools")
     def test_set_tools_inheritance(self, mock_set_tools):
         """Test that set_tools is inherited from OpenAi."""
 

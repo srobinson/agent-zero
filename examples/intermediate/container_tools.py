@@ -1,9 +1,11 @@
 import os
+
 from dotenv import load_dotenv
-from agents_manager.AgentZero import AgentZero
-from agents_manager.Agent import Agent
-from agents_manager.Container import Container
-from agents_manager.models.OpenAi import OpenAi
+
+from agentflow.Agent import Agent
+from agentflow.Container import Container
+from main import AgentZero
+from models.OpenAi import OpenAi
 
 # Load environment variables from .env file
 load_dotenv()
@@ -170,5 +172,7 @@ def main():
         print(f"\nError saving response: {e}")
 
 
+if __name__ == "__main__":
+    main()
 if __name__ == "__main__":
     main()

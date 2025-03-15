@@ -1,10 +1,9 @@
 import unittest
-from unittest.mock import Mock, patch, MagicMock
-import pytest
+from unittest.mock import MagicMock, Mock, patch
 
-from agents_manager.WorkflowManager import WorkflowManager, Workflow, WorkflowStep
-from agents_manager.AgentManager import AgentManager
-from agents_manager.Agent import Agent
+from agentflow.Agent import Agent
+from agentflow.AgentManager import AgentManager
+from agentflow.WorkflowManager import WorkflowManager
 
 
 class TestWorkflowManager(unittest.TestCase):
@@ -12,9 +11,9 @@ class TestWorkflowManager(unittest.TestCase):
 
     def setUp(self):
         """Set up test fixtures before each test method."""
-        self.agent_manager = Mock(spec=AgentManager)
-        self.agent_manager.initialize_user_input = Mock()
-        self.workflow_manager = WorkflowManager(self.agent_manager)
+        self.agentflow = Mock(spec=AgentManager)
+        self.agentflow.initialize_user_input = Mock()
+        self.workflow_manager = WorkflowManager(self.agentflow)
 
         # Create mock agents
         self.mock_agent1 = Mock(spec=Agent)
@@ -27,8 +26,8 @@ class TestWorkflowManager(unittest.TestCase):
         self.mock_agent2.instruction = "Agent 2 instruction"
         self.mock_agent2.tools = []
 
-        # Mock agent_manager.get_agent to return our mock agents
-        self.agent_manager.get_agent.side_effect = lambda name: (
+        # Mock agentflow.get_agent to return our mock agents
+        self.agentflow.get_agent.side_effect = lambda name: (
             (0, self.mock_agent1)
             if name == "agent1"
             else (1, self.mock_agent2) if name == "agent2" else (None, None)
@@ -36,7 +35,6 @@ class TestWorkflowManager(unittest.TestCase):
 
     def test_init(self):
         """Test initialization of WorkflowManager."""
-        self.assertEqual(self.workflow_manager.agent_manager, self.agent_manager)
         self.assertEqual(self.workflow_manager.workflows, {})
 
     def test_create_workflow(self):
@@ -70,7 +68,7 @@ class TestWorkflowManager(unittest.TestCase):
         self.assertEqual(step.agent, self.mock_agent1)
         self.assertEqual(step.description, "Step 1 description")
         self.assertIsNone(step.next_step)
-        self.agent_manager.add_agent.assert_called_once_with(self.mock_agent1)
+        self.agentflow.add_agent.assert_called_once_with(self.mock_agent1)
 
     def test_create_step_with_agent_name(self):
         """Test creating a step with an agent name."""
@@ -82,7 +80,7 @@ class TestWorkflowManager(unittest.TestCase):
         self.assertEqual(step.agent, self.mock_agent1)
         self.assertEqual(step.description, "Step 1 description")
         self.assertIsNone(step.next_step)
-        self.agent_manager.get_agent.assert_called_with("agent1")
+        self.agentflow.get_agent.assert_called_with("agent1")
 
     def test_create_step_with_nonexistent_agent(self):
         """Test creating a step with a nonexistent agent raises ValueError."""
@@ -125,8 +123,8 @@ class TestWorkflowManager(unittest.TestCase):
         workflow.starts_with(step1)
         step1.then(step2)
 
-        # Mock agent_manager methods
-        self.agent_manager.run_agent.side_effect = [
+        # Mock agentflow methods
+        self.agentflow.run_agent.side_effect = [
             {"content": "Step 1 result", "tool_calls": []},
             {"content": "Step 2 result", "tool_calls": []},
         ]
@@ -134,15 +132,11 @@ class TestWorkflowManager(unittest.TestCase):
         # Run the workflow
         results = self.workflow_manager.run_workflow("test_workflow", "Initial input")
 
-        # Verify the agent_manager methods were called correctly
-        self.agent_manager.initialize_user_input.assert_any_call(
-            "agent1", "Initial input"
-        )
-        self.agent_manager.initialize_user_input.assert_any_call(
-            "agent2", "Step 1 result"
-        )
-        self.agent_manager.run_agent.assert_any_call("agent1")
-        self.agent_manager.run_agent.assert_any_call("agent2")
+        # Verify the agentflow methods were called correctly
+        self.agentflow.initialize_user_input.assert_any_call("agent1", "Initial input")
+        self.agentflow.initialize_user_input.assert_any_call("agent2", "Step 1 result")
+        self.agentflow.run_agent.assert_any_call("agent1")
+        self.agentflow.run_agent.assert_any_call("agent2")
 
         # Verify the results
         self.assertEqual(
@@ -175,12 +169,12 @@ class TestWorkflowManager(unittest.TestCase):
         workflow.starts_with(step1)
         step1.then(step2)
 
-        # Mock agent_manager methods
-        self.agent_manager.run_agent_stream.side_effect = [
+        # Mock agentflow methods
+        self.agentflow.run_agent_stream.side_effect = [
             iter([{"content": "Step 1 chunk 1"}, {"content": "Step 1 chunk 2"}]),
             iter([{"content": "Step 2 chunk 1"}, {"content": "Step 2 chunk 2"}]),
         ]
-        self.agent_manager.run_agent.side_effect = [
+        self.agentflow.run_agent.side_effect = [
             {"content": "Step 1 result", "tool_calls": []},
             {"content": "Step 2 result", "tool_calls": []},
         ]
@@ -199,17 +193,13 @@ class TestWorkflowManager(unittest.TestCase):
             completion_callback=completion_callback,
         )
 
-        # Verify the agent_manager methods were called correctly
-        self.agent_manager.initialize_user_input.assert_any_call(
-            "agent1", "Initial input"
-        )
-        self.agent_manager.initialize_user_input.assert_any_call(
-            "agent2", "Step 1 result"
-        )
-        self.agent_manager.run_agent_stream.assert_any_call("agent1")
-        self.agent_manager.run_agent_stream.assert_any_call("agent2")
-        self.agent_manager.run_agent.assert_any_call("agent1")
-        self.agent_manager.run_agent.assert_any_call("agent2")
+        # Verify the agentflow methods were called correctly
+        self.agentflow.initialize_user_input.assert_any_call("agent1", "Initial input")
+        self.agentflow.initialize_user_input.assert_any_call("agent2", "Step 1 result")
+        self.agentflow.run_agent_stream.assert_any_call("agent1")
+        self.agentflow.run_agent_stream.assert_any_call("agent2")
+        self.agentflow.run_agent.assert_any_call("agent1")
+        self.agentflow.run_agent.assert_any_call("agent2")
 
         # Verify the callbacks were called correctly
         step_callback.assert_any_call(

@@ -1,9 +1,10 @@
 import json
-import pytest
-from typing import Dict, Any, List, Generator, Callable, Union
+from typing import Any, Callable, Dict, Generator, List, Union
 from unittest.mock import Mock
 
-from agents_manager.Model import Model
+import pytest
+
+from agentflow.Model import Model
 
 
 class MockModel(Model):

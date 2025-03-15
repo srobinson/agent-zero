@@ -1,5 +1,5 @@
 import inspect
-from typing import Any, Dict, List, Callable, Union, Optional
+from typing import Any, Callable, Dict, List, Optional, Union
 
 
 def populate_template(template: Any, data: Dict[str, Any]) -> Any:

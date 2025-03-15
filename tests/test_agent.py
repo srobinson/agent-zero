@@ -1,9 +1,10 @@
-import pytest
 from unittest.mock import Mock, patch
 
-from agents_manager.Agent import Agent
-from agents_manager.Model import Model
-from agents_manager.Container import Container
+import pytest
+
+from agentflow.Agent import Agent
+from agentflow.Container import Container
+from agentflow.Model import Model
 
 
 @pytest.fixture
@@ -32,7 +33,7 @@ def test_agent_init_with_tool_choice(mock_model):
     def tool_choice(tools):
         return tools[0]
 
-    with patch("agents_manager.utils.function_to_json") as mock_function_to_json:
+    with patch("agentflow.utils.function_to_json") as mock_function_to_json:
         mock_function_to_json.return_value = {"name": "tool_choice"}
         agent = Agent(name="test_agent", model=mock_model, tool_choice=tool_choice)
 

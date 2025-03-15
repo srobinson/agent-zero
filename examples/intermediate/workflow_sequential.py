@@ -1,9 +1,11 @@
 import os
+
 from dotenv import load_dotenv
-from agents_manager.AgentZero import AgentZero
-from agents_manager.Agent import Agent
-from agents_manager.Workflow import AgentWorkflow, AgentStep
-from agents_manager.models.OpenAi import OpenAi
+
+from agentflow.Agent import Agent
+from agentflow.Workflow import AgentStep, AgentWorkflow
+from main import AgentZero
+from models.OpenAi import OpenAi
 
 # Load environment variables from .env file
 load_dotenv()
@@ -180,5 +182,7 @@ def run_workflow(workflow, topic):
 
 # Example usage
 if __name__ == "__main__":
+    topic = input("Enter a topic for the research workflow: ")
+    results = run_workflow(research_workflow, topic)
     topic = input("Enter a topic for the research workflow: ")
     results = run_workflow(research_workflow, topic)

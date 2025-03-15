@@ -1,9 +1,9 @@
-from typing import Any, Dict, List, Union, Optional, Generator, Callable
+from typing import Any, Callable, Dict, Generator, List, Optional, Union
 
 from openai import OpenAI
 
-from agents_manager.models.OpenAi import OpenAi
-from agents_manager.Container import Container
+from agentflow.Container import Container
+from models.OpenAi import OpenAi
 
 
 class Grok(OpenAi):

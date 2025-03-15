@@ -1,11 +1,11 @@
-from typing import List, Dict, Any, Union, Optional, Generator, Callable
+from typing import Any, Callable, Dict, Generator, List, Optional, Union
 
 from google import genai
 from google.genai import types
 
-from agents_manager.Container import Container
-from agents_manager.Model import Model
-from agents_manager.utils import populate_template, function_to_json, container_to_json
+from agentflow.Container import Container
+from agentflow.Model import Model
+from agentflow.utils import container_to_json, function_to_json, populate_template
 
 
 class Genai(Model):

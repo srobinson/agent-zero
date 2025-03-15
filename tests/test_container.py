@@ -1,10 +1,10 @@
-import pytest
-from unittest.mock import Mock, patch, MagicMock, call
-import docker
-from docker.errors import DockerException, ImageNotFound, APIError
+from unittest.mock import MagicMock, Mock, call, patch
 
-from agents_manager.Container import Container
-from agents_manager.Agent import Agent
+import pytest
+from docker.errors import APIError, DockerException, ImageNotFound
+
+from agentflow.Agent import Agent
+from agentflow.Container import Container
 
 
 @pytest.fixture
@@ -66,7 +66,7 @@ class TestContainer:
 
         # Mock the replace_placeholder function
         with patch(
-            "agents_manager.Container.replace_placeholder",
+            "agentflow.Container.replace_placeholder",
             return_value="New instruction with Container output",
         ):
             # Run the container
@@ -88,7 +88,7 @@ def test_container_integration_with_replace_placeholder(mock_from_env):
     """Test integration with replace_placeholder utility."""
     # Mock the replace_placeholder function
     with patch(
-        "agents_manager.Container.replace_placeholder",
+        "agentflow.Container.replace_placeholder",
         return_value="Process this data: Container output",
     ):
 

@@ -5,10 +5,10 @@ This module provides functionality for creating and running workflows
 of agents, allowing for sequential execution and data passing between agents.
 """
 
-from typing import Dict, List, Any, Optional, Callable, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 
-from agents_manager.Agent import Agent
-from agents_manager.AgentManager import AgentManager
+from agentflow.Agent import Agent
+from agentflow.AgentManager import AgentManager
 
 
 class WorkflowStep:

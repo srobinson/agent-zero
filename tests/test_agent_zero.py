@@ -1,10 +1,9 @@
 import unittest
-from unittest.mock import Mock, patch, MagicMock
-import pytest
+from unittest.mock import MagicMock, Mock, patch
 
-from agents_manager.AgentZero import AgentZero
-from agents_manager.Agent import Agent
-from agents_manager.WorkflowManager import Workflow, WorkflowStep
+from agentflow.Agent import Agent
+from agentflow.WorkflowManager import Workflow, WorkflowStep
+from main import AgentZero
 
 
 class TestAgentZero(unittest.TestCase):
@@ -12,11 +11,9 @@ class TestAgentZero(unittest.TestCase):
 
     def setUp(self):
         """Set up test fixtures before each test method."""
-        # Patch the AgentManager and WorkflowManager classes
-        self.agent_manager_patcher = patch("agents_manager.AgentZero.AgentManager")
-        self.workflow_manager_patcher = patch(
-            "agents_manager.AgentZero.WorkflowManager"
-        )
+        # Patch the specific imports in main.py
+        self.agent_manager_patcher = patch("main.AgentManager")
+        self.workflow_manager_patcher = patch("main.WorkflowManager")
 
         # Get the mocks
         self.mock_agent_manager_class = self.agent_manager_patcher.start()
@@ -100,4 +97,11 @@ class TestAgentZero(unittest.TestCase):
 
     def test_create_workflow(self):
         """Test creating a workflow."""
-        self.mock_workflow
+        self.mock_workflow_manager.create_workflow.return_value = self.mock_workflow
+
+        result = self.agent_zero.create_workflow("test_workflow", "Test description")
+
+        self.mock_workflow_manager.create_workflow.assert_called_once_with(
+            "test_workflow", "Test description"
+        )
+        self.assertEqual(result, self.mock_workflow)

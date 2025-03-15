@@ -1,10 +1,12 @@
 import os
 import sys
+
 from dotenv import load_dotenv
-from agents_manager.AgentZero import AgentZero
-from agents_manager.Agent import Agent
-from agents_manager.models.OpenAi import OpenAi
-from agents_manager.models.Anthropic import Anthropic
+
+from agentflow.Agent import Agent
+from main import AgentZero
+from models.Anthropic import Anthropic
+from models.OpenAi import OpenAi
 
 # Load environment variables from .env file
 load_dotenv()
@@ -209,5 +211,7 @@ Identify strengths, weaknesses, and suggest specific improvements."""
         print(f"Error saving results: {e}")
 
 
+if __name__ == "__main__":
+    main()
 if __name__ == "__main__":
     main()

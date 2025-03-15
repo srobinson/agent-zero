@@ -1,10 +1,12 @@
 import os
 import sys
 import time
+
 from dotenv import load_dotenv
-from agents_manager.AgentZero import AgentZero
-from agents_manager.Agent import Agent
-from agents_manager.models.OpenAi import OpenAi
+
+from agentflow.Agent import Agent
+from main import AgentZero
+from models.OpenAi import OpenAi
 
 # Load environment variables from .env file
 load_dotenv()
@@ -134,5 +136,7 @@ def main():
     simulate_conversation(agent_zero, "conversation_assistant")
 
 
+if __name__ == "__main__":
+    main()
 if __name__ == "__main__":
     main()

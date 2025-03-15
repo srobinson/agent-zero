@@ -1,9 +1,9 @@
-import json
-import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import MagicMock, Mock, patch
 
-from agents_manager.models.Anthropic import Anthropic
-from agents_manager.Container import Container
+import pytest
+
+from agentflow.Container import Container
+from models.Anthropic import Anthropic
 
 
 class TestAnthropicModel:
@@ -13,14 +13,14 @@ class TestAnthropicModel:
         """Set up test fixtures before each test method."""
         self.model_name = "claude-3-5-sonnet-20241022"
         self.api_key = "test-api-key"
-        with patch("agents_manager.models.Anthropic.Ap"):
+        with patch("models.Anthropic.Ap"):
             self.model = Anthropic(
                 name=self.model_name, api_key=self.api_key, max_tokens=1024
             )
 
     def test_init(self):
         """Test initialization of Anthropic model."""
-        with patch("agents_manager.models.Anthropic.Ap") as mock_anthropic:
+        with patch("models.Anthropic.Ap") as mock_anthropic:
             model = Anthropic(
                 name=self.model_name, api_key=self.api_key, max_tokens=1024
             )
@@ -32,7 +32,7 @@ class TestAnthropicModel:
     def test_init_with_none_name(self):
         """Test initialization with None name raises ValueError."""
         with (
-            patch("agents_manager.models.Anthropic.Ap"),
+            patch("models.Anthropic.Ap"),
             pytest.raises(ValueError, match="A valid Anthropic model name is required"),
         ):
             Anthropic(name=None, api_key=self.api_key)
@@ -328,12 +328,8 @@ class TestAnthropicModel:
 
         # Call the method
         with (
-            patch(
-                "agents_manager.models.Anthropic.function_to_json"
-            ) as mock_func_to_json,
-            patch(
-                "agents_manager.models.Anthropic.container_to_json"
-            ) as mock_container_to_json,
+            patch("models.Anthropic.function_to_json") as mock_func_to_json,
+            patch("models.Anthropic.container_to_json") as mock_container_to_json,
         ):
 
             mock_func_to_json.return_value = {"function": "json"}

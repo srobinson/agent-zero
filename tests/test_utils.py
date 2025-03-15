@@ -1,16 +1,15 @@
-import inspect
-import json
-import pytest
 from unittest.mock import Mock, patch
 
-from agents_manager.utils import (
-    populate_template,
-    function_to_json,
+import pytest
+
+from agentflow.Container import Container
+from agentflow.utils import (
     container_to_json,
     extract_key_values,
+    function_to_json,
+    populate_template,
     replace_placeholder,
 )
-from agents_manager.Container import Container
 
 
 class TestUtils:
