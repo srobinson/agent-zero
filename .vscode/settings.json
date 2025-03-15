@@ -1,0 +1,10 @@
+{
+    "cSpell.ignorePaths": [
+        "**/requirements.txt",
+        "pyproject.toml",
+        "uv.lock"
+    ],
+    "cSpell.words": [
+        "pyproject"
+    ]
+}
